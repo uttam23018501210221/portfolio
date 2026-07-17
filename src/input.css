@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ *
+ * Visual enhancements — written with Tailwind's utility vocabulary via
+ * @apply, plus a few gradient/glow details that read better as raw CSS.
+ * These reuse the brand tokens defined in tailwind.config.js, so they
+ * stay consistent with the hand-built design system in index.html.
+ * ------------------------------------------------------------------ */
+@layer components {
+  /* --- Primary button: gradient fill + soft coloured glow --- */
+  .btn-rose {
+    @apply bg-gradient-to-br from-rose to-[#c9365a] shadow-lg shadow-rose/30;
+  }
+  .btn-rose:hover {
+    @apply shadow-xl shadow-rose/40;
+  }
+
+  /* --- Skill chips: lift + brand accent on hover --- */
+  .chip {
+    @apply transition-all duration-200;
+  }
+  .chip:hover {
+    @apply -translate-y-0.5 border-rose text-rose-deep;
+  }
+
+  /* --- Cards warm to the brand colour on hover --- */
+  .fact:hover,
+  .skill-card:hover,
+  .project:hover {
+    @apply border-rose/40;
+  }
+
+  /* --- Inline tags react to hover --- */
+  .tag {
+    @apply transition-colors duration-200;
+  }
+  .tag:hover {
+    @apply border-rose/50 text-rose-deep;
+  }
+
+  /* --- Contact cards get a subtle gradient surface --- */
+  .c-card {
+    @apply bg-gradient-to-br from-night-card to-[#1b1826];
+  }
+
+  /* --- Soft radial glow behind the hero --- */
+  .hero {
+    @apply relative;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      55% 55% at 78% 22%,
+      rgba(224, 68, 107, 0.13),
+      transparent 70%
+    );
+  }
+
+  /* --- Ambient glow in the dark contact section --- */
+  .contact {
+    @apply relative overflow-hidden;
+  }
+  .contact::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -12%;
+    width: 640px;
+    height: 640px;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: radial-gradient(
+      circle,
+      rgba(224, 68, 107, 0.2),
+      transparent 62%
+    );
+  }
+  .contact .wrap {
+    @apply relative;
+  }
+}

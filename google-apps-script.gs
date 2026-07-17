@@ -1,8 +1,13 @@
 /**
  * Contact form -> Google Sheet
  * =========================================================================
- * This script receives POST submissions from the portfolio contact form
- * and appends each one as a new row in a Google Sheet.
+ * This script receives POST submissions from the portfolio contact form,
+ * appends each one as a new row in a Google Sheet, AND emails you a
+ * notification for every message (set NOTIFY_EMAIL below, or '' to disable).
+ *
+ * Because it sends email, the authorization step (below) will also ask for
+ * permission to "send email as you" — that's expected. Replies to the
+ * notification go straight to the person who filled in the form.
  *
  * ---------------------------------------------------------------------------
  * ONE-TIME SETUP
@@ -38,6 +43,9 @@
 
 var SHEET_NAME = 'Messages';
 
+// Where to email each new submission. Leave '' to turn notifications off.
+var NOTIFY_EMAIL = 'uttamsangani2@gmail.com';
+
 function doPost(e) {
   var lock = LockService.getScriptLock();
   lock.tryLock(10000); // avoid two submissions writing the same row
@@ -58,12 +66,28 @@ function doPost(e) {
       return json({ result: 'ignored' });
     }
 
-    sheet.appendRow([
-      new Date(),
-      p.name || '',
-      p.email || '',
-      p.message || ''
-    ]);
+    var name = p.name || '';
+    var email = p.email || '';
+    var message = p.message || '';
+
+    sheet.appendRow([new Date(), name, email, message]);
+
+    // Email a notification (never let a mail failure block the save).
+    if (NOTIFY_EMAIL) {
+      try {
+        MailApp.sendEmail({
+          to: NOTIFY_EMAIL,
+          subject: 'New portfolio message from ' + (name || 'someone'),
+          replyTo: email || NOTIFY_EMAIL, // reply goes straight to the sender
+          body:
+            'Name:    ' + name + '\n' +
+            'Email:   ' + email + '\n\n' +
+            'Message:\n' + message + '\n'
+        });
+      } catch (mailErr) {
+        // swallow — the row is already saved to the sheet
+      }
+    }
 
     return json({ result: 'success' });
   } catch (err) {

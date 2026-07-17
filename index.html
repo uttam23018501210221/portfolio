@@ -676,8 +676,9 @@ footer p{color:var(--night-soft);font-size:14px}
     </div>
 
     <div class="contact-divider reveal">or send a message</div>
-    <!-- TODO: create a form at formspree.io and replace YOUR_FORM_ID below -->
-    <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+    <!-- Submissions are saved to a Google Sheet via a Google Apps Script Web App.
+         TODO: follow google-apps-script.gs, then paste your /exec URL below. -->
+    <form class="contact-form reveal" id="contactForm" action="https://script.google.com/macros/s/PASTE_YOUR_DEPLOYMENT_ID/exec" method="POST">
       <div class="field">
         <label for="cf-name">Name</label>
         <input id="cf-name" name="name" type="text" required autocomplete="name" placeholder="Your name">
@@ -690,6 +691,8 @@ footer p{color:var(--night-soft);font-size:14px}
         <label for="cf-message">Message</label>
         <textarea id="cf-message" name="message" rows="4" required placeholder="Tell me about your project…"></textarea>
       </div>
+      <!-- Honeypot: real users leave this empty; bots fill it and get ignored -->
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" hidden>
       <button class="btn btn-rose" type="submit">
         Send message
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
@@ -777,7 +780,10 @@ themeToggle.addEventListener('click', () => {
   syncToggle();
 });
 
-// Contact form (Formspree AJAX — no page reload, inline status)
+// Contact form -> Google Sheet (via a Google Apps Script Web App).
+// Apps Script returns an opaque cross-origin response, so we POST in
+// no-cors mode (fire-and-forget) and confirm optimistically. A simple
+// FormData POST avoids a CORS preflight, so the row still gets written.
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
   const note = document.getElementById('formNote');
@@ -785,28 +791,27 @@ if (contactForm) {
     e.preventDefault();
     const endpoint = contactForm.getAttribute('action');
     const btn = contactForm.querySelector('button[type="submit"]');
-    if (endpoint.includes('YOUR_FORM_ID')) {
-      note.textContent = 'Contact form not set up yet — add your Formspree ID in the HTML.';
+    if (endpoint.includes('PASTE_YOUR_DEPLOYMENT_ID')) {
+      note.textContent = 'Contact form not set up yet — add your Google Apps Script URL in the HTML.';
       note.className = 'form-note err';
+      return;
+    }
+    // Honeypot: silently drop bot submissions.
+    if (contactForm.elements['_gotcha'] && contactForm.elements['_gotcha'].value) {
       return;
     }
     btn.disabled = true;
     note.textContent = 'Sending…';
     note.className = 'form-note';
     try {
-      const res = await fetch(endpoint, {
+      await fetch(endpoint, {
         method: 'POST',
         body: new FormData(contactForm),
-        headers: { 'Accept': 'application/json' }
+        mode: 'no-cors'
       });
-      if (res.ok) {
-        contactForm.reset();
-        note.textContent = "Thanks! Your message is on its way — I'll reply soon.";
-        note.className = 'form-note ok';
-      } else {
-        note.textContent = 'Something went wrong. Please email me directly instead.';
-        note.className = 'form-note err';
-      }
+      contactForm.reset();
+      note.textContent = "Thanks! Your message has been saved — I'll reply soon.";
+      note.className = 'form-note ok';
     } catch (err) {
       note.textContent = 'Network error. Please email me directly instead.';
       note.className = 'form-note err';

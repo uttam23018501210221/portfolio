@@ -3,11 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Set the theme before first paint to avoid a flash of the wrong colours -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var dark = saved ? saved === 'dark'
+        : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    } catch (e) {}
+  })();
+</script>
 <title>Uttam Sangani — Frontend Developer</title>
 <meta name="description" content="Uttam Sangani is a frontend developer from Ahmedabad, India. He builds clean, fast, responsive websites with HTML, CSS and JavaScript.">
+<meta name="author" content="Uttam Sangani">
+<meta name="keywords" content="Uttam Sangani, frontend developer, web developer, Ahmedabad, HTML, CSS, JavaScript, responsive websites, GitHub Pages">
+<meta name="theme-color" content="#f7f6f3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14121b" media="(prefers-color-scheme: dark)">
+<!-- TODO: change the domain below if your live URL differs from uttamsangani.dev -->
+<link rel="canonical" href="https://uttamsangani.dev/">
+<!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
 <meta property="og:title" content="Uttam Sangani — Frontend Developer">
 <meta property="og:description" content="Clean, fast, responsive websites. Based in Ahmedabad, India.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://uttamsangani.dev/">
+<meta property="og:site_name" content="Uttam Sangani">
+<meta property="og:image" content="https://uttamsangani.dev/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Uttam Sangani — Frontend Developer. I build clean, fast websites that people enjoy using.">
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Uttam Sangani — Frontend Developer">
+<meta name="twitter:description" content="Clean, fast, responsive websites. Based in Ahmedabad, India.">
+<meta name="twitter:image" content="https://uttamsangani.dev/assets/og-image.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e0446b'/%3E%3Ctext x='32' y='44' font-family='Arial,sans-serif' font-size='34' font-weight='700' fill='white' text-anchor='middle'%3EU%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -272,6 +301,75 @@ footer p{color:var(--night-soft);font-size:14px}
 /* ---------- Reveal animation ---------- */
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .6s ease, transform .6s ease}
 .reveal.in{opacity:1;transform:none}
+
+/* ---------- Theme toggle ---------- */
+.nav-right{display:flex;align-items:center;gap:16px}
+.theme-toggle{
+  background:none;border:1.5px solid var(--line);cursor:pointer;
+  width:40px;height:40px;border-radius:999px;flex:0 0 auto;
+  display:grid;place-items:center;color:var(--ink-soft);
+  transition:color .2s ease,border-color .2s ease;
+}
+.theme-toggle:hover{color:var(--ink);border-color:var(--ink)}
+.theme-toggle svg{display:block}
+.theme-toggle .moon{display:none}
+:root[data-theme="dark"] .theme-toggle .sun{display:none}
+:root[data-theme="dark"] .theme-toggle .moon{display:block}
+
+/* ---------- Quiet button (Download CV) ---------- */
+.btn-quiet{color:var(--ink-soft);background:transparent}
+.btn-quiet:hover{color:var(--ink);background:rgba(22,20,26,.05);transform:translateY(-2px)}
+.dark .btn-quiet,[data-theme="dark"] .btn-quiet{color:var(--night-soft)}
+.dark .btn-quiet:hover,[data-theme="dark"] .btn-quiet:hover{color:var(--night-text);background:rgba(255,255,255,.06)}
+
+/* ---------- Contact form ---------- */
+.contact-divider{
+  display:flex;align-items:center;gap:16px;max-width:560px;margin:36px auto 30px;
+  color:var(--night-soft);font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+}
+.contact-divider::before,.contact-divider::after{content:"";flex:1;height:1px;background:#322c42}
+.contact-form{max-width:560px;margin:0 auto;text-align:left;display:grid;gap:16px}
+.contact-form .field{display:grid;gap:7px}
+.contact-form label{font-size:14px;font-weight:600;color:var(--night-text)}
+.contact-form input,.contact-form textarea{
+  width:100%;font-family:inherit;font-size:15px;color:var(--night-text);
+  background:var(--night-card);border:1px solid #322c42;border-radius:12px;
+  padding:13px 15px;transition:border-color .18s ease,box-shadow .18s ease;
+}
+.contact-form textarea{resize:vertical;min-height:120px}
+.contact-form input::placeholder,.contact-form textarea::placeholder{color:#7c7590}
+.contact-form input:focus,.contact-form textarea:focus{
+  outline:none;border-color:var(--rose);box-shadow:0 0 0 3px rgba(224,68,107,.22);
+}
+.contact-form .btn{justify-content:center;margin-top:2px}
+.contact-form .btn:disabled{opacity:.6;cursor:default;transform:none}
+.form-note{font-size:14px;min-height:20px;text-align:center;color:var(--night-soft)}
+.form-note.ok{color:#5fd39a}
+.form-note.err{color:#ff8098}
+
+/* ---------- Dark theme ---------- */
+:root[data-theme="dark"]{
+  --paper:#14121b;
+  --ink:#f3f0f7;
+  --ink-soft:#a9a3b8;
+  --line:#2a2536;
+  --rose-tint:#2b1a23;
+}
+[data-theme="dark"] header{background:rgba(20,18,27,.82)}
+[data-theme="dark"] .eyebrow{color:#f2789a}
+[data-theme="dark"] .browser{background:#1e1a29;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+[data-theme="dark"] .browser-bar{background:#181524}
+[data-theme="dark"] .urlbar{background:#252034;color:var(--ink-soft)}
+[data-theme="dark"] .hero-badge{background:#0b0910}
+[data-theme="dark"] .chip{background:#1e1a29;color:var(--ink-soft)}
+[data-theme="dark"] .fact,
+[data-theme="dark"] .skill-card,
+[data-theme="dark"] .project{background:#1c1826}
+[data-theme="dark"] .fact-icon{background:rgba(224,68,107,.15);color:#f2789a}
+[data-theme="dark"] .project-type,
+[data-theme="dark"] .project-link{color:#f2789a}
+[data-theme="dark"] .dark{background:#1a1725}
+[data-theme="dark"] mark{background:rgba(224,68,107,.22);color:var(--ink)}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none;transition:none}
@@ -303,22 +401,54 @@ footer p{color:var(--night-soft);font-size:14px}
 }
 </style>
 <link rel="stylesheet" href="assets/tailwind.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Uttam Sangani",
+  "jobTitle": "Frontend Developer",
+  "url": "https://uttamsangani.dev/",
+  "image": "https://uttamsangani.dev/assets/og-image.jpg",
+  "email": "mailto:uttamsangani2@gmail.com",
+  "telephone": "+91-81402-05711",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Ahmedabad",
+    "addressRegion": "Gujarat",
+    "addressCountry": "IN"
+  },
+  "knowsAbout": ["HTML", "CSS", "JavaScript", "Responsive Web Design", "Canva", "Client Communication"],
+  "alumniOf": {
+    "@type": "CollegeOrUniversity",
+    "name": "LJ University, Ahmedabad"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/in/uttamsangani11"
+  ]
+}
+</script>
 </head>
 <body>
 
 <header>
   <nav class="nav wrap" aria-label="Main">
     <a class="logo" href="#home"><span>U</span>Uttam Sangani</a>
-    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-    </button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#journey">Journey</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a class="btn btn-rose" href="#contact">Hire me</a></li>
-    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">
+        <svg class="sun" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="moon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#journey">Journey</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a class="btn btn-rose" href="#contact">Hire me</a></li>
+      </ul>
+    </div>
   </nav>
 </header>
 
@@ -336,6 +466,11 @@ footer p{color:var(--night-soft);font-size:14px}
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
         <a class="btn btn-ghost" href="#contact">Contact me</a>
+        <!-- TODO: drop your CV file at assets/Uttam-Sangani-CV.pdf -->
+        <a class="btn btn-quiet" href="assets/Uttam-Sangani-CV.pdf" download>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Download CV
+        </a>
       </div>
       <div class="hero-meta">
         <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Ahmedabad, Gujarat</span>
@@ -539,6 +674,29 @@ footer p{color:var(--night-soft);font-size:14px}
         WhatsApp
       </a>
     </div>
+
+    <div class="contact-divider reveal">or send a message</div>
+    <!-- TODO: create a form at formspree.io and replace YOUR_FORM_ID below -->
+    <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <div class="field">
+        <label for="cf-name">Name</label>
+        <input id="cf-name" name="name" type="text" required autocomplete="name" placeholder="Your name">
+      </div>
+      <div class="field">
+        <label for="cf-email">Email</label>
+        <input id="cf-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" rows="4" required placeholder="Tell me about your project…"></textarea>
+      </div>
+      <button class="btn btn-rose" type="submit">
+        Send message
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      </button>
+      <p class="form-note" id="formNote" role="status" aria-live="polite"></p>
+    </form>
+
     <div class="contact-cards">
       <a class="c-card reveal" href="mailto:uttamsangani2@gmail.com">
         <div class="fact-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div>
@@ -601,6 +759,61 @@ if (!prefersReduced && 'IntersectionObserver' in window) {
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 } else {
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+}
+
+// Theme toggle
+const themeToggle = document.getElementById('themeToggle');
+function syncToggle() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  themeToggle.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+  themeToggle.setAttribute('aria-pressed', String(dark));
+}
+syncToggle();
+themeToggle.addEventListener('click', () => {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = dark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch (e) {}
+  syncToggle();
+});
+
+// Contact form (Formspree AJAX — no page reload, inline status)
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  const note = document.getElementById('formNote');
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const endpoint = contactForm.getAttribute('action');
+    const btn = contactForm.querySelector('button[type="submit"]');
+    if (endpoint.includes('YOUR_FORM_ID')) {
+      note.textContent = 'Contact form not set up yet — add your Formspree ID in the HTML.';
+      note.className = 'form-note err';
+      return;
+    }
+    btn.disabled = true;
+    note.textContent = 'Sending…';
+    note.className = 'form-note';
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        contactForm.reset();
+        note.textContent = "Thanks! Your message is on its way — I'll reply soon.";
+        note.className = 'form-note ok';
+      } else {
+        note.textContent = 'Something went wrong. Please email me directly instead.';
+        note.className = 'form-note err';
+      }
+    } catch (err) {
+      note.textContent = 'Network error. Please email me directly instead.';
+      note.className = 'form-note err';
+    } finally {
+      btn.disabled = false;
+    }
+  });
 }
 
 // Current year

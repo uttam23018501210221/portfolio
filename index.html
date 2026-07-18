@@ -116,9 +116,20 @@ header{
 .nav-links{display:flex;align-items:center;gap:28px;list-style:none}
 .nav-links a{
   text-decoration:none;font-weight:500;font-size:15px;color:var(--ink-soft);
-  padding:6px 2px;transition:color .18s ease;
+  padding:6px 2px;transition:color .2s ease;
 }
-.nav-links a:hover{color:var(--ink)}
+/* Animated underline that wipes in from the left (exits to the right) */
+.nav-links a:not(.btn){position:relative}
+.nav-links a:not(.btn):hover{color:var(--rose-deep)}
+[data-theme="dark"] .nav-links a:not(.btn):hover{color:#f2789a}
+.nav-links a:not(.btn)::after{
+  content:"";position:absolute;left:2px;right:2px;bottom:0;height:2px;
+  background:var(--rose);border-radius:2px;
+  transform:scaleX(0);transform-origin:right;
+  transition:transform .32s cubic-bezier(.65,0,.35,1);
+}
+.nav-links a:not(.btn):hover::after,
+.nav-links a:not(.btn):focus-visible::after{transform:scaleX(1);transform-origin:left}
 .btn{
   display:inline-flex;align-items:center;gap:9px;
   font-weight:600;font-size:15px;text-decoration:none;

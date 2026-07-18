@@ -313,6 +313,16 @@ footer p{color:var(--night-soft);font-size:14px}
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .6s ease, transform .6s ease}
 .reveal.in{opacity:1;transform:none}
 
+/* ---------- Arrow hover animations ---------- */
+.hero-ctas .btn-rose svg,
+.contact-form .btn svg,
+.project-link svg,
+.btn-quiet svg{transition:transform .22s ease}
+.hero-ctas .btn-rose:hover svg{transform:translateX(4px)}
+.contact-form .btn:hover svg{transform:translateX(4px)}
+.project-link:hover svg{transform:translate(4px,-4px)}
+.btn-quiet:hover svg{transform:translateY(3px)}
+
 /* ---------- Theme toggle ---------- */
 .nav-right{display:flex;align-items:center;gap:16px}
 .theme-toggle{

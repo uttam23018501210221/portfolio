@@ -380,7 +380,7 @@ footer p{color:var(--night-soft);font-size:14px}
 /* ---------- Intro splash ---------- */
 .intro{
   position:fixed;inset:0;z-index:9999;
-  display:grid;place-items:center;text-align:center;
+  display:grid;grid-template-columns:minmax(0,1fr);place-items:center;text-align:center;
   background:#0c0a12;overflow:hidden;
   transition:transform .85s cubic-bezier(.76,0,.24,1);
   will-change:transform;
@@ -393,7 +393,7 @@ footer p{color:var(--night-soft);font-size:14px}
   top:-12%;left:50%;transform:translateX(-50%);pointer-events:none;
   background:radial-gradient(circle,rgba(224,68,107,.18),transparent 60%);
 }
-.intro-inner{position:relative;padding:24px}
+.intro-inner{position:relative;width:100%;max-width:min(860px,92vw);padding:24px;margin:0 auto}
 .intro-icons{display:flex;gap:14px;justify-content:center;margin-bottom:26px}
 .intro-badge{
   width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
@@ -405,7 +405,7 @@ footer p{color:var(--night-soft);font-size:14px}
 .intro-badge:nth-child(3){animation-delay:.45s}
 .intro-title{
   font-family:var(--font-display);font-weight:800;letter-spacing:-.01em;line-height:1.06;
-  font-size:clamp(30px,6vw,56px);
+  font-size:clamp(26px,6vw,56px);
   background:linear-gradient(120deg,#fff 30%,#f2789a 50%,#fff 70%);
   background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;
   opacity:0;transform:translateY(16px);
@@ -416,6 +416,12 @@ footer p{color:var(--night-soft);font-size:14px}
   color:var(--night-soft);border:1px solid rgba(255,255,255,.14);border-radius:999px;
   padding:7px 16px;opacity:0;transform:translateY(16px);
   animation:introUp .7s ease .95s forwards;
+}
+.intro-role{
+  display:block;margin-top:14px;
+  font-family:var(--font-mono);font-weight:500;
+  font-size:clamp(11px,1.6vw,14px);letter-spacing:.22em;text-transform:uppercase;
+  color:#b9b3c6;-webkit-text-fill-color:#b9b3c6;
 }
 @keyframes introPop{to{opacity:1;transform:scale(1)}}
 @keyframes introUp{to{opacity:1;transform:none}}
@@ -497,7 +503,8 @@ footer p{color:var(--night-soft);font-size:14px}
       <span class="intro-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg></span>
       <span class="intro-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></span>
     </div>
-    <h2 class="intro-title">Welcome to my<br>Portfolio Website</h2>
+    <h2 class="intro-title">Hi, I'm Uttam Sangani<span class="intro-role">Frontend Developer</span></h2>
+    <!-- <h2 class="intro-title">Welcome to my<br>Portfolio Website</h2> -->
     <div class="intro-url">uttamsangani.dev</div>
   </div>
 </div>

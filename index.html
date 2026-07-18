@@ -397,6 +397,21 @@ footer p{color:var(--night-soft);font-size:14px}
 @keyframes hirePulse{0%,100%{box-shadow:0 6px 18px rgba(224,68,107,.30)}50%{box-shadow:0 8px 26px rgba(224,68,107,.55)}}
 @keyframes hireShine{0%,58%{left:-140%}78%,100%{left:150%}}
 
+/* ---------- Custom cursor (mouse / fine-pointer devices only) ---------- */
+@media (hover:hover) and (pointer:fine){
+  html.has-custom-cursor,html.has-custom-cursor *{cursor:none !important}
+  .cursor-dot,.cursor-ring{
+    position:fixed;top:0;left:0;pointer-events:none;z-index:10000;border-radius:50%;
+    transform:translate3d(-50%,-50%,0);
+  }
+  .cursor-dot{width:8px;height:8px;background:var(--rose);transition:opacity .2s ease}
+  .cursor-ring{width:34px;height:34px;border:2px solid var(--rose);
+    transition:width .25s ease,height .25s ease,background-color .25s ease,border-color .25s ease,opacity .2s ease}
+  .cursor-ring--active{width:56px;height:56px;background-color:rgba(224,68,107,.12)}
+  .cursor-ring--down{width:26px;height:26px;background-color:rgba(224,68,107,.28)}
+  .cursor-hidden{opacity:0 !important}
+}
+
 /* ---------- Theme toggle ---------- */
 .nav-right{display:flex;align-items:center;gap:16px}
 .theme-toggle{
@@ -1080,6 +1095,46 @@ if (contactForm) {
 
 // Current year
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// Creative cursor: a rose dot that tracks the mouse + a ring that trails and
+// grows over interactive elements. Mouse/fine-pointer devices only.
+(function () {
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  const dot = document.createElement('div');
+  const ring = document.createElement('div');
+  dot.className = 'cursor-dot cursor-hidden';
+  ring.className = 'cursor-ring cursor-hidden';
+  dot.setAttribute('aria-hidden', 'true');
+  ring.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(ring);
+  document.body.appendChild(dot);
+  document.documentElement.classList.add('has-custom-cursor');
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const interactive = 'a,button,input,textarea,label,.btn,.chip,.service-card,' +
+    '.skill-card,.project,.c-card,.fact,.theme-toggle,.menu-btn';
+  let mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, shown = false;
+
+  addEventListener('mousemove', function (e) {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) translate(-50%,-50%)';
+    if (!shown) { shown = true; dot.classList.remove('cursor-hidden'); ring.classList.remove('cursor-hidden'); }
+    const over = e.target instanceof Element && e.target.closest(interactive);
+    ring.classList.toggle('cursor-ring--active', !!over);
+  }, { passive: true });
+
+  addEventListener('mousedown', function () { ring.classList.add('cursor-ring--down'); });
+  addEventListener('mouseup', function () { ring.classList.remove('cursor-ring--down'); });
+  document.addEventListener('mouseleave', function () { dot.classList.add('cursor-hidden'); ring.classList.add('cursor-hidden'); });
+  document.addEventListener('mouseenter', function () { dot.classList.remove('cursor-hidden'); ring.classList.remove('cursor-hidden'); });
+
+  (function loop() {
+    const e = reduce ? 1 : 0.18;
+    rx += (mx - rx) * e; ry += (my - ry) * e;
+    ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0) translate(-50%,-50%)';
+    requestAnimationFrame(loop);
+  })();
+})();
 </script>
 </body>
 </html>

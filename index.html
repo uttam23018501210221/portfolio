@@ -377,6 +377,26 @@ footer p{color:var(--night-soft);font-size:14px}
 .marquee:hover .marquee-track{animation-play-state:paused}
 @keyframes marquee{to{transform:translateX(-50%)}}
 
+/* "Hire me" CTA — attention pulse, shine sweep, colour flip on hover */
+.nav-links .btn-rose{
+  position:relative;overflow:hidden;
+  animation:hirePulse 2.8s ease-in-out infinite;
+  transition:background .25s ease, color .25s ease, transform .18s ease;
+}
+.nav-links .btn-rose::after{
+  content:"";position:absolute;top:0;bottom:0;left:-140%;width:55%;pointer-events:none;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.42),transparent);
+  transform:skewX(-20deg);
+  animation:hireShine 5s ease-in-out infinite;
+}
+.nav-links .btn-rose:hover{
+  background:#fff;color:var(--rose-deep);
+  transform:translateY(-2px) scale(1.04);
+}
+[data-theme="dark"] .nav-links .btn-rose:hover{background:var(--night-text);color:var(--night)}
+@keyframes hirePulse{0%,100%{box-shadow:0 6px 18px rgba(224,68,107,.30)}50%{box-shadow:0 8px 26px rgba(224,68,107,.55)}}
+@keyframes hireShine{0%,58%{left:-140%}78%,100%{left:150%}}
+
 /* ---------- Theme toggle ---------- */
 .nav-right{display:flex;align-items:center;gap:16px}
 .theme-toggle{
@@ -504,7 +524,9 @@ footer p{color:var(--night-soft);font-size:14px}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none}
-  .reveal.in,.orb,.hero-visual,.live-dot::after,.marquee-track{animation:none !important}
+  .reveal.in,.orb,.hero-visual,.live-dot::after,.marquee-track,
+  .nav-links .btn-rose,.nav-links .btn-rose::after{animation:none !important}
+  .nav-links .btn-rose::after{display:none}
   *{transition:none !important}
 }
 
